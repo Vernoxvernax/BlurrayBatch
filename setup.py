@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='BlurryBatch',
-      version='1.0',
+      version='1.0.1',
       description='Python blu-ray and dvd - batch utility',
       author='Vernoxvernax',
       author_email='vernoxvernax@gmail.com',

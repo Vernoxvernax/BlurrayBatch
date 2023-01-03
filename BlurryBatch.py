@@ -2,16 +2,17 @@ import os
 import subprocess
 
 class Media_File:
-    def __init__(self, file_name, disc, path, output, name, output_folder):
+    def __init__(self, file_name: str, disc: str, path: str, output: str, name: str, output_folder: str, size: float):
+        self.name = name
         self.file_name = file_name
+        self.size = size
         self.disc = disc
         self.path = path
         self.output = output
         self.output_folder = output_folder
-        self.name = name
     def full(self) -> str:
-        return "Name: {name}\nFilename: \"{filename}\"\nPath: \"{path}\"\nOutput: \"{output}\"\nOutput-folder: \"{output_folder}\"\nDisc: \"{disc}\"".format(
-            name=self.name, filename=self.file_name, path=self.path, output=self.output, disc=self.disc, output_folder=self.output_folder
+        return "Name: \"{name}\"\nFilename: \"{filename}\"\nSize: {size} MB\nPath: \"{path}\"\nOutput: \"{output}\"\nOutput-folder: \"{output_folder}\"\nDisc: \"{disc}\"".format(
+            name=self.name, filename=self.file_name, path=self.path, output=self.output, disc=self.disc, output_folder=self.output_folder, size=self.size
         )
 
 def output_list(list: list[Media_File]) -> list[str]:
@@ -90,14 +91,16 @@ def search(path: str, bluray=True, output=".", create_output_folder=False, addit
                                 continue
                         disc=dir
                         break
-                    
+                size = os.path.getsize(file) / (1024 * 1024)
                 media.append(Media_File(
+                    name=directories[-1].lower().removesuffix(srch),
                     file_name=directories[-1],
+                    size=size,
                     disc=disc,
                     path=file,
                     output=output+"/"+disc+"/"+directories[-1].lower().removesuffix(srch),
-                    output_folder=output+"/"+disc+"/",
-                    name=directories[-1].lower().removesuffix(srch)))
+                    output_folder=output+"/"+disc+"/"
+                ))
         if len(media) != len(set(output_list(media))):
             duplicates = duplicates + 1
         else:
