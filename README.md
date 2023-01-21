@@ -1,4 +1,6 @@
-# **Batch through your Blu-Ray- or DVD-MVs**
+# **Easily batch through your Blu-Ray- or DVD-MVs**
+
+___
 
 ## **search**
 
@@ -8,17 +10,23 @@ def search(path: str, bluray=True, output=".", create_output_folder=False, addit
 
 ### Parameters:
 
-* path `str`: Destination as str of the bd- or dvd-mv. - `./Anime`
+* **path** `str`: Destination as str of the bd- or dvd-mv. - `./Cool Anime`
 
-* bluray `bool`: Whether you want to process a bluray or dvd. (helps to distinguish folder names) - `True`
+* **type** `int`: What kind of folder you want to process. (helps to distinguish folder names)
+    *   `0` - Blu-ray
+    *   `1` - DVDmv
+    *   `2` - Remux
 
-* output `str`: What the output path of the files should be. (prefix) - `./encode`
+* **extension** `str/None`: Extension of the file which should be indexed.
+    * If left unspecified, `type` will be used.
 
-* create_output_folder `bool`: Whether the output folder should be created or not. - `False`
+* **output** `str`: What the output path of the files should be. (prefix) - `./encode`
 
-* additional_folder_names `list(str)`: A list of folder names that should be ignored when searching for a volume/disc name. (like "BDMV") - `()`
+* **create_output_folder** `bool`: Whether the output folder should be created or not. - `False`
 
-* -> list[Media_File]: If all works as expected you'll get a list of Media_File objects. These are all the files found in the folder which parameters that should make batching very easy.
+* **additional_folder_names** `list(str)`: A list of folder names that should be ignored when searching for a volume/disc name. (like "BDMV") - `()`
+
+* -> **list[Media_File]**: If all works as expected you'll get a list of Media_File objects. These are all the files found in the folder which parameters that should make batching very easy.
 
 ```py
 class Media_File:
@@ -41,44 +49,16 @@ def run_pipe(command: str, print_all = False)
 
 ### Details:
 
-Since running commands making use of pipes is pretty complicated in python, I decided to write a little function to make the use of it easier. As a bonus, this also carefully prints progress bar lines like the ones from opusenc so that the output doesn't turn into complete mess.
+Since making use of pipes in python is pretty complicated, I decided to write a little wrapper around it. As a bonus, this also carefully prints the progress bar lines like the ones from opusenc so that the output doesn't turn into complete mess. You can selectively turn of the output of the first command.
 
 ### Parameters:
 
-* command `str`: The command which needs to be run. - `ffmpeg -i "file.m2ts" -map 0:a:0 -f wav - | opusenc - "output.opus"`
+* **command** `str`: The command which needs to be run. - `ffmpeg -i "file.m2ts" -map 0:a:0 -f wav - | opusenc - "output.opus"`
 
-* print_all 'bool': Whether all outputs, instead of just the second command, should be printed. This is usefull if you don't need `ffmpeg` to ruin your interface. - `False`
+* **print_all** 'bool': Whether all outputs, instead of just the second command, should be printed. This is useful if you don't need `ffmpeg` to ruin your interface. - `False`
 
 ___
 
-## **Example script**:
+For a comprehensive example take a look at examples
 
-```py
-import os
-import sys
-import BlurryBatch
-
-if len(sys.argv) > 1:
-    arg=sys.argv[1]
-else:
-    arg=""
-
-files = BlurryBatch.search(path="./Cool Anime", bluray=True, output="./encode", create_output_folder=True)
-
-for file in files:
-    # Check if the output file already exists
-    if os.path.isfile(file.output+".mkv") and arg != "overwrite":
-        continue
-    
-    # Check for audio track
-    if os.path.isfile(file.output+".opus") and arg != "overwrite":
-        continue
-    
-    print("Now working on {}".format(file.output))
-    
-    command = 'ffmpeg -i "{}" -map 0:a:0 -f wav - | opusenc - "{}.opus"'.format(file.path, file.output)
-    BlurryBatch.run_pipe(command, print_all=False)
-    ...
-```
-
-More features (bugfixes) are likely to come.
+More features (bug fixes) are likely to come.
