@@ -125,12 +125,12 @@ def search(path: str, type: int, extension=None, output="./encode", create_outpu
                         break
                 size = os.path.getsize(file) / (1024 * 1024)
                 media.append(Media_File(
-                    name=directories[-1].lower().removesuffix(ext),
+                    name=directories[-1].removesuffix(ext),
                     file_name=directories[-1],
                     size=size,
                     disc=disc,
                     path=file,
-                    output=output+"/"+disc+"/"+directories[-1].lower().removesuffix(ext),
+                    output=output+"/"+disc+"/"+directories[-1].removesuffix(ext),
                     output_folder=output+"/"+disc+"/"
                 ))
                 
