@@ -109,8 +109,10 @@ def search(path: str, type: int, extension=None, output="./encode", create_outpu
                 reverse_dirs=directories.copy()
                 reverse_dirs.reverse()
                 disc=""
+                root = file.removesuffix(directories[-1])
                 skip = duplicates
                 for dir in reverse_dirs[1:]:
+                    root = root.removesuffix("/").removesuffix(dir)
                     if dir in common_dirs:
                         continue
                     else:
@@ -124,7 +126,6 @@ def search(path: str, type: int, extension=None, output="./encode", create_outpu
                         disc=dir
                         break
                 size = os.path.getsize(file) / (1024 * 1024)
-                root = path.removesuffix(file).removesuffix(disc)
                 media.append(Media_File(
                     name=directories[-1].removesuffix(ext).removesuffix(ext.upper()),
                     file_name=directories[-1],
