@@ -130,3 +130,6 @@ dmypy.json
 
 # Encode test folder
 ./encode
+./src
+./pkg
+./*.zst
